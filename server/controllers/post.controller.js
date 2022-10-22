@@ -44,7 +44,10 @@ module.exports.getAllPosts = (request, response) => {
 // Based on learn Platform get 
 
 module.exports.getSinglePost = (request, response) => {
-    Post.findOne({_id:request.params.id})
+    Post.findOne({_id:request.params.id}).populate({
+        path: "postedBy",
+        model: "User",
+    })
         .then(post => response.json(post))
         .catch(err => response.json(err))
 }
