@@ -13,6 +13,7 @@ const NewPost = () => {
     const {id} = useParams();
     const [textBody, setTextBody] = useState("");
     const [postedBy, setPostedBy] = useState({});
+    const [comment, setComment] = useState();
 
     const [errors, setErrors] = useState({});
     const navigate = useNavigate()
@@ -22,6 +23,7 @@ const NewPost = () => {
         axios.post('http://localhost:8000/api/post', {
             textBody,
             postedBy,
+            comment
         },
         {
             withCredentials: true

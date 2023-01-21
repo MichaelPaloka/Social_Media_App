@@ -18,12 +18,15 @@ const Homepage = () => {
     const [posts, setPosts] = useState([])
     const [newPost, setNewPost] = useState()
     const [textBody, setTextBody] = useState("");
+    const [comment, setComment] = useState();
     const [postedBy, setPostedBy] = useState({});
-
+    const [updPost, setUpdPost] = useState()
     const [errors, setErrors] = useState({});
 
     const [modalData, setModalData] = useState();
+    console.log('modalData')
     console.log(modalData)
+
 
     const navigate = useNavigate()
     
@@ -63,6 +66,7 @@ const Homepage = () => {
         axios.post('http://localhost:8000/api/post', {
             textBody,
             postedBy,
+            comment
         },
         {
             withCredentials: true
@@ -81,6 +85,20 @@ const Homepage = () => {
             })
     }
 
+    // const updatePost = (e) => {
+    //     e.preventDefault();
+    //     axios.put('http://localhost:8000/api/post/' + postId, {
+    //         comments
+    //     })
+    //         .then(res => {
+    //             console.log(res);
+    //             navigate("/socialmedia/home")
+    //     })
+    //         .catch(err => {
+    //             console.log(err.response);
+    //             setErrors(err.response.data.errors);})
+    // }
+
     const onLogoutHandler = () => {
         axios.post('http://localhost:8000/api/user/logout')
         .then((response) => console.log(response))
@@ -95,7 +113,7 @@ const Homepage = () => {
                 {/* Navigation Bar */}
                 <Navbar bg="light" expand="lg">
                     <Container>
-                        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+                        <Navbar.Brand href="#home">Social</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
@@ -145,12 +163,11 @@ const Homepage = () => {
 
                     {/* Cards for each individual Post */}
                     {
-                        posts.map((post, index) =>{
+                        posts.slice().reverse().map((post, index) =>{
                             return (
                                     <Card style={{ width: 400,  color: 'blue'}} key={index}>
                                         <Card.Header as="h5">{post.postedBy.firstName} {post.postedBy.lastName}</Card.Header>
                                         <Card.Body>
-                                            <Card.Title>Special title treatment</Card.Title>
                                             <Card.Text>
                                                 {post.textBody}
                                             </Card.Text>

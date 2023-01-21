@@ -1,19 +1,22 @@
 const Comment = require('../models/comment.model');
+const Post = require('../models/post.model')
 const jwt = require('jsonwebtoken')
 
 
 // Based on instructor Josh's contorller for creating posts
 
 module.exports.createComment = async (request, response) => {
-    const {body} = request;
+    const {body, params} = request;
     let newComment = new Comment(body);
-    const decodedJWT = await jwt.verify(
-        request.cookies.usertoken, 
-        process.env.JWT_SECRET);
-        newComment.commentAuthor = decodedJWT.id;
-
+    newComment.postId = params.postId;
+    console.log("New comment with both postid and use id added after authentication", newComment)
     try {
         newComment = await newComment.save();
+        postQuery = await Post.findByIdAndUpdate(
+            {_id: params.postId},
+            {$push: {comments: newComment._id}},
+            {new: true, useFindAndModify: true}
+        )
         response.json((newComment));
     } catch (error) {
         console.log("error adding comment", error)

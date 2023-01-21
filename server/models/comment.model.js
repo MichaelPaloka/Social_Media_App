@@ -1,6 +1,14 @@
 const mongoose = require('mongoose');
 
 const CommentSchema = new mongoose.Schema({
+    postId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+        required: [
+            true,
+            "The post id is required!"
+        ],
+    },
     commentText: {
         type: String,
         required: [
@@ -8,7 +16,7 @@ const CommentSchema = new mongoose.Schema({
             "Comment text is needed!"
         ]
     },
-    commentAuthor: {
+    postedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: [
@@ -17,3 +25,5 @@ const CommentSchema = new mongoose.Schema({
         ],
     }
 })
+
+module.exports = mongoose.model('Comment', CommentSchema);

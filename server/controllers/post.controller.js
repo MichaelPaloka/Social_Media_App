@@ -7,11 +7,6 @@ const jwt = require('jsonwebtoken')
 module.exports.createPost = async (request, response) => {
     const {body} = request;
     let newPost = new Post(body);
-    const decodedJWT = await jwt.verify(
-        request.cookies.usertoken, 
-        process.env.JWT_SECRET);
-
-    newPost.postedBy = decodedJWT.id;
 
     try {
         newPost = await newPost.save();
@@ -44,10 +39,13 @@ module.exports.getAllPosts = (request, response) => {
 // Based on learn Platform get 
 
 module.exports.getSinglePost = (request, response) => {
-    Post.findOne({_id:request.params.id}).populate({
+    Post.findOne({_id:request.params.id}).populate([{
         path: "postedBy",
         model: "User",
-    })
+    },  {
+        path: "comments",
+        model: "Comment",
+    }])
         .then(post => response.json(post))
         .catch(err => response.json(err))
 }
