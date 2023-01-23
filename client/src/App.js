@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import Homepage from './components/Homepage';
 import EditProfileForm from './components/EditProfile';
 import NewPost from './components/NewPost';
+import {io} from 'socket.io-client'
 
 function App() {
+
+  const [socket] = useState(()=>io(process.env.MY_PORT))
+  useEffect( ()=>{
+    socket.on('connection', ()=>{
+      console.log('Socket connection to server')
+    })
+    return () => socket.disconnect(true);
+  },[])
+
   return (
     <div className="App">
       <BrowserRouter>

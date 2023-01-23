@@ -5,6 +5,14 @@ const bcrypt = require('bcrypt')
 
 
 const UserSchema = new mongoose.Schema({
+    handle: { 
+        type: String,
+        required: [
+            true,
+            "A handle is required!"
+        ],
+        minlength: [2, "First name must be longer than 2 characters!"]
+    },
     firstName: { 
         type: String,
         required: [
@@ -39,12 +47,26 @@ const UserSchema = new mongoose.Schema({
             "A password is required!"
         ],
     },
-    // posts: {
-    //     type: [],
-    //     required: [
-    //         false,
-    //     ]
-    // }
+    follower: [{
+        type: [],
+        required: [
+            false,
+        ]
+    }],
+    following: [{
+        type: [],
+        required: [
+            false,
+        ]
+    }],
+    Notification: [{
+        type: [],
+        required: [
+            false,
+        ]
+    }],
+    
+
 }, { timestamps: true });
 
 

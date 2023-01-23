@@ -96,3 +96,13 @@ module.exports.getLoggedInUser = (request, response) => {
             response.json(user)})
         .catch(err => response.json(err))
 }
+
+module.exports.addFollower = (request, response) => {
+    const decodedJWT = jwt.verify(
+        request.cookies.usertoken, 
+        process.env.JWT_SECRET);
+    User.findOne({_id:decodedJWT.id})
+        .then(user => {
+            response.json(user)})
+        .catch(err => response.json(err))
+}
