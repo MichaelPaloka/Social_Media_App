@@ -37,7 +37,7 @@ const NewPost = () => {
             .catch( err => {
                 console.log(err.response.data);
                 setErrors(err.response.data.errors);
-                navigate("/socialmedia/home/user/newpost");
+                navigate("/socialmedia/home");
             })
     }
 
@@ -53,43 +53,23 @@ const NewPost = () => {
 
     // The navbar is imported from react-bootstrap which I am using for the project.
     return (
-        <div className='homepage-background'>
-            <Navbar bg="light" expand="lg">
-                    <Container>
-                        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                        <Navbar.Collapse id="basic-navbar-nav">
-                            <Nav className="me-auto">
-                            <Nav.Link href="#home">Home</Nav.Link>
-                            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">
-                                    Profile
-                                </NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">
-                                    Friend List
-                                </NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.3">
-                                    Something
-                                </NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">
-                                    Logout
-                                </NavDropdown.Item>
-                            </NavDropdown>
-                            </Nav>
-                        </Navbar.Collapse>
-                    </Container>
-                </Navbar>
-
-            <div style={{display: 'flex', justifyContent: 'center', height:1000 }}>
-                <form onSubmit={createPostHandler} style={{ backgroundColor: '#FFFFFF', width: 1000, height: 500, marginTop:100, borderStyle: 'solid', borderRadius: 20,padding: 25 }}>
-                    <h3 style={{textAlign: 'center', color: "#72A0C1"}}>New Post</h3>
-                    <label for="textBody">
-                        Textbody
-                        <input type="text" onChange = {(e) => setTextBody(e.target.value)} class="form-control"></input>
-                    </label>
-                    
-                    <input type={"submit"} value="Create Post" class="btn btn-outline-primary"/>
+        <div>
+            <div>
+                <form onSubmit={createPostHandler}>
+                    <Card style={{ width: 400,  color: 'blue'}}>
+                        <Card.Header as="h5">Create a Post</Card.Header>
+                        <Card.Body>
+                            <Card.Text>
+                            <label for="textBody">
+                                <input type="text" onChange = {(e) => setTextBody(e.target.value)} class="form-control"></input>
+                            </label>
+                            {errors.textBody && (
+                                <p style={{color: 'red'}}>{errors.textBody.message}</p>
+                            )}
+                            </Card.Text>
+                            <input type={"submit"} value="Create Post" class="btn btn-outline-primary"/>
+                        </Card.Body>
+                    </Card>
                 </form>
             </div>
         </div>

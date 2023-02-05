@@ -9,9 +9,10 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import Stack from 'react-bootstrap/Stack';
+import NewPost from './NewPost';
 import '../App.css';
 
-const Homepage = () => {
+const Homepage = ({socket}) => {
     const {id} = useParams();
     const [user, setUser] = useState({})
 
@@ -61,29 +62,29 @@ const Homepage = () => {
         })
     }, [])
 
-    const createPostHandler = (e) => {
-        e.preventDefault();
-        axios.post('http://localhost:8000/api/post', {
-            textBody,
-            postedBy,
-            comment
-        },
-        {
-            withCredentials: true
-        }
-        )
-            .then( res => {
-                console.log(res);
-                console.log(res.data);
-                setPosts([...posts, res.data]);
-                navigate("/socialmedia/home");
-            })
-            .catch( err => {
-                console.log(err.response.data);
-                setErrors(err.response.data.errors);
-                navigate("/socialmedia/home");
-            })
-    }
+    // const createPostHandler = (e) => {
+    //     e.preventDefault();
+    //     axios.post('http://localhost:8000/api/post', {
+    //         textBody,
+    //         postedBy,
+    //         comment
+    //     },
+    //     {
+    //         withCredentials: true
+    //     }
+    //     )
+    //         .then( res => {
+    //             console.log(res);
+    //             console.log(res.data);
+    //             setPosts([...posts, res.data]);
+    //             navigate("/socialmedia/home");
+    //         })
+    //         .catch( err => {
+    //             console.log(err.response.data);
+    //             setErrors(err.response.data.errors);
+    //             navigate("/socialmedia/home");
+    //         })
+    // }
 
     // const updatePost = (e) => {
     //     e.preventDefault();
@@ -141,26 +142,7 @@ const Homepage = () => {
 
                 <Stack gap={4} style={{ alignItems: 'center' }}>
                     {/* Form for a new post */}
-                        <div>
-                            <form onSubmit={createPostHandler}>
-                                <Card style={{ width: 400,  color: 'blue'}}>
-                                    <Card.Header as="h5">Create a Post</Card.Header>
-                                    <Card.Body>
-                                        <Card.Text>
-                                        <label for="textBody">
-                                            <input type="text" onChange = {(e) => setTextBody(e.target.value)} class="form-control"></input>
-                                        </label>
-                                        {errors.textBody && (
-                                            <p style={{color: 'red'}}>{errors.textBody.message}</p>
-                                        )}
-                                        </Card.Text>
-                                        <input type={"submit"} value="Create Post" class="btn btn-outline-primary"/>
-
-                                    </Card.Body>
-                                </Card>
-                            </form>
-                        </div>
-
+                    <NewPost></NewPost>
                     {/* Cards for each individual Post */}
                     {
                         posts.slice().reverse().map((post, index) =>{
