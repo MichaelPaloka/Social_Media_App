@@ -21,8 +21,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<LoginForm/>} path="/socialmedia" default/>
-          <Route element={<Homepage/>} path="/socialmedia/home"/>
-          <Route element={<EditProfileForm/>} path="/socialmedia/home/user/:id"/>
+          <Route element={<Homepage socket={socket}/>} path="/socialmedia/home"/>
+          <Route element={<EditProfileForm/>} path="/socialmedia/home/user"/>
           <Route element={<NewPost/>} path="/socialmedia/home/user/newpost"/>
         </Routes>
       </BrowserRouter>

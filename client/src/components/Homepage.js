@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import {  useNavigate, Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -10,24 +10,19 @@ import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import Stack from 'react-bootstrap/Stack';
 import NewPost from './NewPost';
+import Notification from './Notifications';
+import {io} from 'socket.io-client'
 import '../App.css';
 
 const Homepage = ({socket}) => {
-    const {id} = useParams();
-    const [user, setUser] = useState({})
 
     const [posts, setPosts] = useState([])
-    const [newPost, setNewPost] = useState()
-    const [textBody, setTextBody] = useState("");
-    const [comment, setComment] = useState();
-    const [postedBy, setPostedBy] = useState({});
     const [updPost, setUpdPost] = useState()
     const [errors, setErrors] = useState({});
 
     const [modalData, setModalData] = useState();
     console.log('modalData')
     console.log(modalData)
-
 
     const navigate = useNavigate()
     
@@ -36,25 +31,12 @@ const Homepage = ({socket}) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-
-    // Gathers user info based off id for the profile page
-    useEffect(()=>{
-        axios.get("http://localhost:8000/api/user/" + id, {withCredentials: true})
-        .then((res)=>{
-            console.log(res.data);
-            setUser(res.data);
-        })
-        .catch((err)=>{
-            console.log(err);
-        })
-    }, [])
-
     // Gathers data on all posts
     useEffect(()=>{
         axios.get("http://localhost:8000/api/post/", {withCredentials: true})
         .then((res)=>{
             console.log(res.data);
-            setPosts(res.data);
+            setPosts(...posts, res.data);
             console.log(posts)
         })
         .catch((err)=>{
@@ -62,50 +44,15 @@ const Homepage = ({socket}) => {
         })
     }, [])
 
-    // const createPostHandler = (e) => {
-    //     e.preventDefault();
-    //     axios.post('http://localhost:8000/api/post', {
-    //         textBody,
-    //         postedBy,
-    //         comment
-    //     },
-    //     {
-    //         withCredentials: true
-    //     }
-    //     )
-    //         .then( res => {
-    //             console.log(res);
-    //             console.log(res.data);
-    //             setPosts([...posts, res.data]);
-    //             navigate("/socialmedia/home");
-    //         })
-    //         .catch( err => {
-    //             console.log(err.response.data);
-    //             setErrors(err.response.data.errors);
-    //             navigate("/socialmedia/home");
-    //         })
-    // }
-
-    // const updatePost = (e) => {
-    //     e.preventDefault();
-    //     axios.put('http://localhost:8000/api/post/' + postId, {
-    //         comments
-    //     })
-    //         .then(res => {
-    //             console.log(res);
-    //             navigate("/socialmedia/home")
-    //     })
-    //         .catch(err => {
-    //             console.log(err.response);
-    //             setErrors(err.response.data.errors);})
-    // }
-
+    
     const onLogoutHandler = () => {
         axios.post('http://localhost:8000/api/user/logout')
         .then((response) => console.log(response))
         .catch((err) => console.log(err))
         navigate('/socialmedia')
     }
+    
+    console.log("the id is "+ errors)
 
 
     return (
@@ -120,7 +67,7 @@ const Homepage = ({socket}) => {
                             <Nav className="me-auto">
                             <Nav.Link href="#home">Home</Nav.Link>
                             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                                <NavDropdown.Item href= {`/socialmedia/home/user/${user.id}`}>
+                                <NavDropdown.Item href= {`/socialmedia/home/user`}>
                                     Profile
                                 </NavDropdown.Item>
                                 <NavDropdown.Item href="#action/3.2">
@@ -132,6 +79,11 @@ const Homepage = ({socket}) => {
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="#action/3.4">
                                     Logout
+                                </NavDropdown.Item>
+                            </NavDropdown>
+                            <NavDropdown title="Notifications" id="basic-nav-dropdown">
+                                <NavDropdown.Item>
+                                    example notifiacion
                                 </NavDropdown.Item>
                             </NavDropdown>
                             </Nav>

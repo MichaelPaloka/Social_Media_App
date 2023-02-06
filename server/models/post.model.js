@@ -23,7 +23,10 @@ const PostSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Comment",
         
-    }]
+    }],
+    likes: {
+        type: Boolean,
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Post', PostSchema);

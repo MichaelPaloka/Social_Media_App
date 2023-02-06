@@ -4,8 +4,8 @@ import axios from 'axios';
 import Card from 'react-bootstrap/Card';
 
 
-const NewPost = () => {
-    // const {id} = useParams();
+const Notification = () => {
+
     const [textBody, setTextBody] = useState("");
     const [postedBy, setPostedBy] = useState({});
     const [comment, setComment] = useState();
@@ -36,45 +36,6 @@ const NewPost = () => {
             })
     }
 
-    // const createPostHandler = (e) => {
-    //     e.preventDefault();
-    //     axios.post('http://localhost:8000/api/post', {
-    //         textBody,
-    //         postedBy,
-    //         comment
-    //     },
-    //     {
-    //         withCredentials: true
-    //     }
-    //     )
-    //         .then( res => {
-    //             console.log(res);
-    //             console.log(res.data);
-    //             setPosts([...posts, res.data]);
-    //             navigate("/socialmedia/home");
-    //         })
-    //         .catch( err => {
-    //             console.log(err.response.data);
-    //             setErrors(err.response.data.errors);
-    //             navigate("/socialmedia/home");
-    //         })
-    // }
-
-    // const updatePost = (e) => {
-    //     e.preventDefault();
-    //     axios.put('http://localhost:8000/api/post/' + postId, {
-    //         comments
-    //     })
-    //         .then(res => {
-    //             console.log(res);
-    //             navigate("/socialmedia/home")
-    //     })
-    //         .catch(err => {
-    //             console.log(err.response);
-    //             setErrors(err.response.data.errors);})
-    // }
-
-
     return (
         <div>
             <div>
@@ -99,4 +60,4 @@ const NewPost = () => {
     )
 }
 
-export default NewPost;
+export default Notification;
