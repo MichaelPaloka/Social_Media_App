@@ -1,25 +1,19 @@
-const Comment = require('../models/comment.model');
-const Post = require('../models/post.model')
+const FollowReq = require('../models/followReq.model');
+const User = require('../models/user.model')
 const jwt = require('jsonwebtoken')
 
 
 // Based on instructor Josh's contorller for creating posts
 
-module.exports.createComment = async (request, response) => {
-    const {body, params} = request;
-    let newComment = new Comment(body);
-    newComment.postId = params.postId;
-    console.log("New comment with both postid and use id added after authentication", newComment)
+module.exports.createFollowReq = async (request, response) => {
+    const {body} = request;
+    let newPost = new FollowReq(body);
+    
     try {
-        newComment = await newComment.save();
-        postQuery = await Post.findByIdAndUpdate(
-            {_id: params.postId},
-            {$push: {comments: newComment._id}},
-            {new: true, useFindAndModify: true}
-        )
-        response.json((newComment));
+        newPost = await newPost.save();
+        response.json((newPost));
     } catch (error) {
-        console.log("error adding comment", error)
+        console.log("error submitting post", error)
         response.status(400).json(error);
         return;
     }
@@ -27,21 +21,32 @@ module.exports.createComment = async (request, response) => {
 
 // Based on learn Platform getAll
 
-module.exports.getAllComments = (request, response) => {
-    Comment.find().populate({
-        path: "postedBy",
+module.exports.getFollowReq = (request, response) => {
+    const decodedJWT = jwt.verify(
+        request.cookies.usertoken, 
+        process.env.JWT_SECRET);
+    FollowReq.find({sentTo : decodedJWT.id}).populate({
+        path: "sentBy",
         model: "User",
     })
         .exec()
-        .then(allComments => {
-            console.log(allComments);
-            response.json(allComments);
+        .then(allFollowReq => {
+            console.log(allFollowReq);
+            response.json(allFollowReq);
         }) 
         .catch(err => {
             console.log(err)
             response.json(err)
         })
 }
+
+// Based on learn Platform get 
+
+// module.exports.getSinglePost = (request, response) => {
+//     Post.findOne({_id:request.params.id})
+//         .then(post => response.json(post))
+//         .catch(err => response.json(err))
+// }
 
 // Based on learn Platform find one and update
 

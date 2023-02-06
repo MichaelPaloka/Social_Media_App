@@ -7,5 +7,5 @@ module.exports = (app) => {
     app.post('/api/post/:postId/comment', jwtMiddleware.authenticateJwt, CommentController.createComment);
     app.get('/api/post/:postId/comment/:id', jwtMiddleware.authenticateJwt, CommentController.getAllComments);
     app.put('/api/post/:postId/comment/:id', jwtMiddleware.authenticateJwt, CommentController.updateComment);
-    app.delete('/api/post/:postId/comment:id', jwtMiddleware.authenticateJwt, CommentController.deleteComment);
+    app.delete('/api/post/:postId/comment/:id', jwtMiddleware.authenticateJwt, CommentController.deleteComment);
 }

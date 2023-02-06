@@ -10,13 +10,13 @@ import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import Stack from 'react-bootstrap/Stack';
 import NewPost from './NewPost';
-import Notification from './Notifications';
 import {io} from 'socket.io-client'
 import '../App.css';
 
 const Homepage = ({socket}) => {
 
     const [posts, setPosts] = useState([])
+    const [followReq, setFollowReq] = useState([])
     const [updPost, setUpdPost] = useState()
     const [errors, setErrors] = useState({});
 
@@ -30,6 +30,19 @@ const Homepage = ({socket}) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    //Gets all user notificiations
+    useEffect(()=>{
+        axios.get("http://localhost:8000/api/notification/followreq", {withCredentials: true})
+        .then((res)=>{
+            console.log(res.data);
+            setFollowReq(...followReq, res.data);
+            console.log(posts)
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+    }, [])
 
     // Gathers data on all posts
     useEffect(()=>{
@@ -112,6 +125,15 @@ const Homepage = ({socket}) => {
                             )
                         })
                     }
+                    <div>
+                    {
+                        followReq.map((aFollowReq, index) =>{
+                            return (
+                                    <h1>A request sent from {aFollowReq.sentBy.firstName}</h1>
+                            )
+                        })
+                    }
+                    </div>
                 </Stack>
                 
                 <Modal show={show} onHide={handleClose}>

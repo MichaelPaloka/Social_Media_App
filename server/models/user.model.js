@@ -7,10 +7,10 @@ const bcrypt = require('bcrypt')
 const UserSchema = new mongoose.Schema({
     handle: { 
         type: String,
-        required: [
-            true,
-            "A handle is required!"
-        ],
+        // required: [
+        //     true,
+        //     "A handle is required!"
+        // ],
         minlength: [2, "First name must be longer than 2 characters!"]
     },
     firstName: { 
@@ -48,7 +48,8 @@ const UserSchema = new mongoose.Schema({
         ],
     },
     follower: [{
-        type: [],
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: [
             false,
         ]
@@ -59,8 +60,9 @@ const UserSchema = new mongoose.Schema({
             false,
         ]
     }],
-    Notification: [{
-        type: [],
+    followReq: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "FollowReq",
         required: [
             false,
         ]
