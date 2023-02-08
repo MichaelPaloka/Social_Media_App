@@ -6,7 +6,7 @@ const FollowReqSchema = new mongoose.Schema({
         ref: "User",
         required: [
             true,
-            "Posted by is required!"
+            "sentBy by is required!"
         ],
     },
     sentTo: {
@@ -14,7 +14,7 @@ const FollowReqSchema = new mongoose.Schema({
         ref: "User",
         required: [
             true,
-            "Posted by is required!"
+            "SentTo by is required!"
         ],
     }
 }, { timestamps: true });

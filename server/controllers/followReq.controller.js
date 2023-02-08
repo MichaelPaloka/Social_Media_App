@@ -6,14 +6,18 @@ const jwt = require('jsonwebtoken')
 // Based on instructor Josh's contorller for creating posts
 
 module.exports.createFollowReq = async (request, response) => {
+    const decodedJWT = jwt.verify(
+        request.cookies.usertoken, 
+        process.env.JWT_SECRET);
     const {body} = request;
-    let newPost = new FollowReq(body);
-    
+    let newFollowReq = new FollowReq(body);
+    newFollowReq.sentBy = decodedJWT.id
+    console.log("this is the followreq " + newFollowReq.sentTo)
     try {
-        newPost = await newPost.save();
-        response.json((newPost));
+        newFollowReq = await newFollowReq.save();
+        response.json((newFollowReq));
     } catch (error) {
-        console.log("error submitting post", error)
+        console.log("error sending follow request", error)
         response.status(400).json(error);
         return;
     }

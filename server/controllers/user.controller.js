@@ -79,6 +79,14 @@ module.exports.getUser = (request, response) => {
         .catch(err => response.json(err))
 }
 
+module.exports.getAllUsers = (request, response) => {
+    const decodedJWT = jwt.verify(
+        request.cookies.usertoken, 
+        process.env.JWT_SECRET);
+    User.find({_id: {$ne : decodedJWT.id}})
+        .then(user => response.json(user))
+        .catch(err => response.json(err))
+}
 
 // Based on learn Platform update
 module.exports.updateProfile = (request, response) => {

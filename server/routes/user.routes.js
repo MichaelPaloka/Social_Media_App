@@ -11,4 +11,6 @@ module.exports = (app) => {
     app.get('/api/user/:id', jwtMiddleware.authenticateJwt, UserController.getLoggedInUser);
     app.put('/api/user/:id', jwtMiddleware.authenticateJwt, UserController.updateProfile);
     app.get('/api/auser/:id', jwtMiddleware.authenticateJwt, UserController.getUser);
+    app.get('/api/users/', jwtMiddleware.authenticateJwt, UserController.getAllUsers);
+
 }

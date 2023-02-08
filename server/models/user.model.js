@@ -55,14 +55,14 @@ const UserSchema = new mongoose.Schema({
         ]
     }],
     following: [{
-        type: [],
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: [
             false,
         ]
     }],
     followReq: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "FollowReq",
+        type: String,
         required: [
             false,
         ]

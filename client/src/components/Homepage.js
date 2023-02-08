@@ -20,6 +20,10 @@ const Homepage = ({socket}) => {
     const [updPost, setUpdPost] = useState()
     const [errors, setErrors] = useState({});
 
+    const [users, setUsers] = useState([])
+    const [sentBy, setSentBy] = useState()
+    const [sentTo, setSentTo] = useState()
+
     const [modalData, setModalData] = useState();
     console.log('modalData')
     console.log(modalData)
@@ -44,6 +48,20 @@ const Homepage = ({socket}) => {
         })
     }, [])
 
+
+    //Gets all user profiles
+    useEffect(()=>{
+        axios.get("http://localhost:8000/api/users", {withCredentials: true})
+        .then((res)=>{
+            console.log(res.data);
+            setUsers(...users, res.data);
+            console.log(users)
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
+    }, [])
+
     // Gathers data on all posts
     useEffect(()=>{
         axios.get("http://localhost:8000/api/post/", {withCredentials: true})
@@ -57,15 +75,40 @@ const Homepage = ({socket}) => {
         })
     }, [])
 
+
+    const createFollowReq = (e) => {
+        e.preventDefault();
+        axios.post('http://localhost:8000/api/notification/followreq', {
+            sentTo,
+            sentBy,
+        },
+        {
+            withCredentials: true
+        }
+        )
+            .then( res => {
+                console.log(res);
+                console.log(res.data);
+                navigate("/socialmedia/home");
+            })
+            .catch( err => {
+                console.log(err.response.data);
+                setErrors(err.response.data.errors);
+                navigate("/socialmedia/home");
+            })
+    }
     
+    // const addFollower = (e) => {
+    //     e.preventDefault();
+    //     ac
+    // }
+
     const onLogoutHandler = () => {
         axios.post('http://localhost:8000/api/user/logout')
         .then((response) => console.log(response))
         .catch((err) => console.log(err))
         navigate('/socialmedia')
     }
-    
-    console.log("the id is "+ errors)
 
 
     return (
@@ -125,6 +168,7 @@ const Homepage = ({socket}) => {
                             )
                         })
                     }
+                    
                     <div>
                     {
                         followReq.map((aFollowReq, index) =>{
@@ -135,6 +179,25 @@ const Homepage = ({socket}) => {
                     }
                     </div>
                 </Stack>
+
+                <div>
+                    {
+                        users.map((user, index) =>{
+                            return (
+                                    <div>
+                                        
+                                        <form onSubmit={createFollowReq}>
+                                            <h1 key={index}>{user.firstName}</h1>
+                                            <label for={"sentTo"}>
+                                                <input type={"hidden"} value={user._id} id={"sentTo"}></input>
+                                            </label>
+                                            <input type={"submit"} value="Follow" class="btn btn-outline-primary"/>
+                                        </form>
+                                    </div>
+                            )
+                        })
+                    }
+                </div>
                 
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>
