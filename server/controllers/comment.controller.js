@@ -8,12 +8,13 @@ const jwt = require('jsonwebtoken')
 module.exports.createComment = async (request, response) => {
     const {body, params} = request;
     let newComment = new Comment(body);
-    newComment.postId = params.postId;
+    console.log(newComment.postId)
+    console.log(newComment.commentText)
     console.log("New comment with both postid and use id added after authentication", newComment)
     try {
         newComment = await newComment.save();
         postQuery = await Post.findByIdAndUpdate(
-            {_id: params.postId},
+            {_id: newComment.postId},
             {$push: {comments: newComment._id}},
             {new: true, useFindAndModify: true}
         )

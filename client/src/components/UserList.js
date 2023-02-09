@@ -58,7 +58,7 @@ const UserList = () => {
                                             {/* <label for={"sentTo"}>
                                                 <input type={"hidden"} id={"sentTo"} name={"sentTo"}></input>
                                             </label> */}
-                                            <input type={"submit"} value="Follow" className="btn btn-outline-primary"/>
+                                            <input type={"submit"} value="Follow" onClick={() => setSentTo(user._id)} className="btn btn-outline-primary"/>
                                         </form>
                                     </div>
                             )

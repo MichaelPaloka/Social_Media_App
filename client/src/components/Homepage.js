@@ -19,6 +19,7 @@ const Homepage = ({socket}) => {
     const [errors, setErrors] = useState({});
 
     const [commentText, setCommentText] = useState();
+    const [postId, setPostId] = useState();
 
     const [users, setUsers] = useState([])
 
@@ -47,26 +48,27 @@ const Homepage = ({socket}) => {
     }, [])
 
     // Create a new comment
-    // const createComment = (e) => {
-    //     e.preventDefault();
-    //     axios.post('http://localhost:8000/api/post', {
-    //         comment
-    //     },
-    //     {
-    //         withCredentials: true
-    //     }
-    //     )
-    //         .then( res => {
-    //             console.log(res);
-    //             console.log(res.data);
-    //             navigate("/socialmedia/home");
-    //         })
-    //         .catch( err => {
-    //             console.log(err.response.data);
-    //             setErrors(err.response.data.errors);
-    //             navigate("/socialmedia/home");
-    //         })
-    // }
+    const createComment = (e) => {
+        e.preventDefault();
+        axios.post('http://localhost:8000/api/post/comment', {
+            commentText,
+            postId
+        },
+        {
+            withCredentials: true
+        }
+        )
+            .then( res => {
+                console.log(res);
+                console.log(res.data);
+                navigate("/socialmedia/home");
+            })
+            .catch( err => {
+                console.log(err.response.data);
+                setErrors(err.response.data.errors);
+                navigate("/socialmedia/home");
+            })
+    }
 
     return (
         <div >
@@ -96,6 +98,10 @@ const Homepage = ({socket}) => {
                                                     <p></p>
                                                 </div>
                                             ))}
+                                            <form onSubmit={createComment}>
+                                                <input type={"text"} onChange={(e) => setCommentText(e.target.value)}></input>
+                                                <input type={"submit"} onClick={(e) => setPostId(post._id)}></input>
+                                            </form>
                                         </Card.Body>
                                     </Card>
                             )
