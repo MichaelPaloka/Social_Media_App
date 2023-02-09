@@ -24,6 +24,9 @@ module.exports.getAllPosts = (request, response) => {
     Post.find().populate({
         path: "postedBy",
         model: "User",
+    }).populate({
+            path: 'comments',
+            model: 'Comment',
     })
         .exec()
         .then(allPosts => {

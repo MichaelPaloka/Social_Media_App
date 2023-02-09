@@ -10,6 +10,7 @@ module.exports.createFollowReq = async (request, response) => {
         request.cookies.usertoken, 
         process.env.JWT_SECRET);
     const {body} = request;
+    console.log("the sentTo is " + body.sentTo)
     let newFollowReq = new FollowReq(body);
     newFollowReq.sentBy = decodedJWT.id
     console.log("this is the followreq " + newFollowReq.sentTo)

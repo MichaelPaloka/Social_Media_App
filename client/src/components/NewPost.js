@@ -84,13 +84,13 @@ const NewPost = () => {
                         <Card.Body>
                             <Card.Text>
                             <label for="textBody">
-                                <input type="text" onChange = {(e) => setTextBody(e.target.value)} class="form-control"></input>
+                                <input type="text" onChange = {(e) => setTextBody(e.target.value)} className="form-control"></input>
                             </label>
                             {errors.textBody && (
                                 <p style={{color: 'red'}}>{errors.textBody.message}</p>
                             )}
                             </Card.Text>
-                            <input type={"submit"} value="Create Post" class="btn btn-outline-primary"/>
+                            <input type={"submit"} value="Create Post" className="btn btn-outline-primary"/>
                         </Card.Body>
                     </Card>
                 </form>
