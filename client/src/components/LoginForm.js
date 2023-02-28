@@ -10,6 +10,7 @@ const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("")
+    const [handle, setHandle] = useState("")
     const [errors, setErrors] = useState({});
     const navigate = useNavigate()
 
@@ -20,6 +21,7 @@ const LoginForm = () => {
         axios.post('http://localhost:8000/api/user', {
             firstName,
             lastName,
+            handle,
             email,
             password,
             confirmPassword
@@ -69,6 +71,7 @@ const LoginForm = () => {
                                     <input type="email" onChange = {(e) => setEmail(e.target.value)} className="form-control"></input>
                                 </div>
                         </div>
+
                         {/* Password */}
                         <div className="col">
                             <label for="password" className="col-form-label">Password:</label>
@@ -118,6 +121,17 @@ const LoginForm = () => {
                             </div>
                             {errors.email && (
                                     <p style={{color: 'red'}}>{errors.email.message}</p>
+                            )}
+
+                            {/* Handle */}
+                            <div className="col">
+                                <label for="handle" className="col-form-label">Handle:</label>
+                                    <div className="col-sm-10">
+                                        <input type="text" onChange = {(e) => setHandle(e.target.value)} className="form-control"></input>
+                                    </div>
+                            </div>
+                            {errors.handle && (
+                                    <p style={{color: 'red'}}>{errors.handle.message}</p>
                             )}
                         </div>
                         <div className="row mb-3">

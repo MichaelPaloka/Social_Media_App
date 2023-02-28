@@ -6,7 +6,6 @@ import Card from 'react-bootstrap/Card';
 import Modal from 'react-bootstrap/Modal';
 import Stack from 'react-bootstrap/Stack';
 import NavBar from './NavBar';
-import NewPost from './NewPost';
 import UserList from './UserList';
 import {io} from 'socket.io-client'
 import '../App.css';
@@ -14,6 +13,10 @@ import '../App.css';
 const Homepage = ({socket}) => {
 
     const [posts, setPosts] = useState([])
+    const [textBody, setTextBody] = useState("");
+    const [postedBy, setPostedBy] = useState({});
+    const [comment, setComment] = useState();
+
     const [followReq, setFollowReq] = useState([])
     const [updPost, setUpdPost] = useState()
     const [errors, setErrors] = useState({});
@@ -38,7 +41,6 @@ const Homepage = ({socket}) => {
     useEffect(()=>{
         axios.get("http://localhost:8000/api/post/", {withCredentials: true})
         .then((res)=>{
-            console.log(res.data);
             setPosts(...posts, res.data);
             console.log(posts)
         })
@@ -46,6 +48,33 @@ const Homepage = ({socket}) => {
             console.log(err);
         })
     }, [])
+    
+
+    // Create a new post
+    const createPostHandler = (e) => {
+        e.preventDefault();
+        axios.post('http://localhost:8000/api/post', {
+            textBody,
+            postedBy,
+            comment
+        },
+        {
+            withCredentials: true
+        }
+        )
+            .then( res => {
+                console.log(res);
+                console.log(res.data);
+                setPosts([...posts, res.data]);
+                setTextBody("")
+                navigate("/socialmedia/home");
+            })
+            .catch( err => {
+                console.log(err.response.data);
+                setErrors(err.response.data.errors);
+                navigate("/socialmedia/home");
+            })
+    }
 
     // Create a new comment
     const createComment = (e) => {
@@ -79,8 +108,30 @@ const Homepage = ({socket}) => {
 
                 <Stack gap={4} style={{ alignItems: 'center' }}>
                     {/* Form for a new post */}
-                    <NewPost></NewPost>
+                    {/* <NewPost></NewPost> */}
                     {/* Cards for each individual Post */}
+
+
+
+                    <div>
+                        <form onSubmit={createPostHandler}>
+                            <Card style={{ width: 400,  color: 'blue'}}>
+                                <Card.Header as="h5">Create a Post</Card.Header>
+                                <Card.Body>
+                                    <Card.Text>
+                                    <label for="textBody">
+                                        <input type="text" onChange = {(e) => setTextBody(e.target.value)} className="form-control"></input>
+                                    </label>
+                                    {errors.textBody && (
+                                        <p style={{color: 'red'}}>{errors.textBody.message}</p>
+                                    )}
+                                    </Card.Text>
+                                    <input type={"submit"} value="Create Post" className="btn btn-outline-primary"/>
+                                </Card.Body>
+                            </Card>
+                        </form>
+                    </div>
+
                     {
                         posts.slice().reverse().map((post, index) =>{
                             return (
@@ -147,7 +198,7 @@ const Homepage = ({socket}) => {
                     {
                         followReq.map((aFollowReq, index) =>{
                             return (
-                                    <h1>A request sent from {aFollowReq.sentBy.firstName}</h1>
+                                    <h1 key={index}>A request sent from {aFollowReq.sentBy.firstName}</h1>
                             )
                         })
                     }
